@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Результаты анализа - AI-торговый бот T-Bank</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #fd7e14;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .nav {
+            margin-bottom: 20px;
+        }
+        .nav a {
+            display: inline-block;
+            background-color: #6c757d;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            margin: 5px;
+            border-radius: 5px;
+        }
+        .nav a:hover {
+            background-color: #545b62;
+        }
+        .symbol-card {
+            background-color: #f8f9fa;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 5px solid #007bff;
+        }
+        .symbol-header {
+            color: #495057;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+        .signal-cell {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .buy-signal {
+            color: #28a745;
+        }
+        .sell-signal {
+            color: #dc3545;
+        }
+        .hold-signal {
+            color: #6c757d;
+        }
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .data-item {
+            background-color: white;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        .predictions {
+            background-color: #e9ecef;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+        .chart-button {
+            display: inline-block;
+            background-color: #17a2b8;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        .chart-button:hover {
+            background-color: #138496;
+        }
+        .timestamp {
+            color: #6c757d;
+            font-size: 12px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎯 Результаты анализа рынка</h1>
+        <p>Технический анализ и сигналы для выбранных инструментов</p>
+    </div>
+
+    <div class="container">
+        <!-- Навигация -->
+        <div class="nav">
+            <a href="/">🏠 Главная</a>
+            <a href="/analyze">📊 Новый анализ</a>
+            <a href="/backtest">📈 Бэктестинг</a>
+        </div>
+
+        {% for symbol in symbols %}
+        {% set result = analysis_results.get(symbol) %}
+        {% if result %}
+        <div class="symbol-card">
+            <div class="symbol-header">
+                <strong>{{ symbol }}</strong>
+            </div>
+
+            <div class="signal-cell">
+                Текущий сигнал:
+                <span class="{% if result.signal == 'BUY' %}buy-signal{% elif result.signal == 'SELL' %}sell-signal{% else %}hold-signal{% endif %}">
+                    {{ result.signal }}
+                </span>
+            </div>
+
+            <div class="data-grid">
+                <div class="data-item">
+                    <strong>Цена:</strong><br>
+                    {{ result.current_price|round(2) }} руб.
+                </div>
+                <div class="data-item">
+                    <strong>RSI:</strong><br>
+                    {{ result.technical_indicators.rsi|round(1) }}
+                </div>
+                <div class="data-item">
+                    <strong>Объем:</strong><br>
+                    {{ result.technical_indicators.volume|round(0) }}
+                </div>
+            </div>
+
+            {% if result.predictions %}
+            <div class="predictions">
+                <strong>Прогнозы ИИ:</strong><br>
+                {% if result.predictions.arima %}
+                    ARIMA: {{ result.predictions.arima|round(2) }}<br>
+                {% endif %}
+                {% if result.predictions.classification %}
+                    Классификация: {{ result.predictions.classification }}
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <a href="/charts/{{ symbol }}" class="chart-button">📊 Просмотр графика</a>
+        </div>
+        {% endif %}
+        {% endfor %}
+
+        <div class="timestamp">
+            Анализ выполнен: {{ timestamp }}
+        </div>
+    </div>
+</body>
+</html>

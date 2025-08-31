@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Анализ рынка - AI-торговый бот T-Bank</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #17a2b8;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        input[type="submit"] {
+            background-color: #28a745;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        input[type="submit"]:hover {
+            background-color: #218838;
+        }
+        .nav {
+            margin-bottom: 20px;
+        }
+        .nav a {
+            display: inline-block;
+            background-color: #6c757d;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            margin: 5px;
+            border-radius: 5px;
+        }
+        .nav a:hover {
+            background-color: #545b62;
+        }
+        .help-text {
+            color: #6c757d;
+            font-size: 12px;
+            margin-top: 3px;
+        }
+        .examples {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📊 Анализ рынка</h1>
+        <p>Получите технический анализ акций с использованием ИИ</p>
+    </div>
+
+    <div class="container">
+        <!-- Навигация -->
+        <div class="nav">
+            <a href="/">🏠 Главная</a>
+            <a href="/backtest">📈 Бэктестинг</a>
+        </div>
+
+        <form action="/analyze" method="post">
+            <div class="form-group">
+                <label for="symbols">Торговые символы:</label>
+                <input type="text"
+                       id="symbols"
+                       name="symbols"
+                       value="SBER,YANDEX,GAZP,LKOH,MOEX"
+                       required
+                       placeholder="Введите символы через запятую">
+                <div class="help-text">
+                    Введите коды акций через запятую (например: SBER,GAZP,LKOH)
+                </div>
+            </div>
+
+            <div class="examples">
+                <strong>Примеры:</strong><br>
+                Российский рынок: SBER, GAZP, LKOH, MOEX, NVTK<br>
+                Международный: GOOGL, TSLA, NVDA
+            </div>
+
+            <br>
+            <input type="submit" value="🚀 Запустить анализ рынка">
+
+            <p class="help-text">
+                Анализ может занять несколько секунд. Будут проанализированы индикаторы: RSI, MACD, SMA, объемы.
+            </p>
+        </form>
+    </div>
+</body>
+</html>

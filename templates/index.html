@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-торговый бот T-Bank</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .status {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .status.running {
+            border-left: 5px solid #28a745;
+        }
+        .status.stopped {
+            border-left: 5px solid #dc3545;
+        }
+        .nav {
+            margin-bottom: 20px;
+        }
+        .nav a {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            margin: 5px;
+            border-radius: 5px;
+        }
+        .nav a:hover {
+            background-color: #0056b3;
+        }
+        .analysis-results {
+            margin-top: 20px;
+        }
+        .symbol {
+            background-color: #e9ecef;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .signal-buy {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .signal-sell {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .signal-hold {
+            color: #6c757d;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🤖 AI-торговый бот T-Bank</h1>
+        <p>Интегрированная система для автоматического трейдинга на основе ИИ</p>
+    </div>
+
+    <div class="container">
+        <!-- Навигация -->
+        <div class="nav">
+            <a href="/analyze">📊 Анализ рынка</a>
+            <a href="/backtest">📈 Бэктестинг</a>
+        </div>
+
+        <!-- Статус бота -->
+        <div class="status {{ 'running' if status.is_running else 'stopped' }}">
+            <h3>📊 Статус бота</h3>
+            <p><strong>Бот запущен:</strong> {{ '✅ Да' if status.is_running else '❌ Нет' }}</p>
+            <p><strong>Последний анализ:</strong> {{ status.last_analysis or 'Не проводился' }}</p>
+            <p><strong>Загруженные модели:</strong> {{ status.models_loaded|join(', ') or 'Нет' }}</p>
+            <p><strong>Компоненты:</strong></p>
+            <ul>
+                <li>Коллектор данных: {{ status.components.data_collector or 'Не доступен' }}</li>
+                <li>Трейдер: {{ status.components.trader or 'Не доступен' }}</li>
+                <li>Менеджер рисков: {{ '✅' if status.components.risk_manager else '❌' }}</li>
+                <li>Метрики: {{ '✅' if status.components.metrics_tracker else '❌' }}</li>
+            </ul>
+        </div>
+
+        <!-- Последние результаты анализа -->
+        {% if analysis_results %}
+        <div class="analysis-results">
+            <h3>🎯 Последние результаты анализа</h3>
+            {% for symbol, result in analysis_results.items() %}
+            <div class="symbol">
+                <h4>{{ symbol }}</h4>
+                <p><strong>Цена:</strong> {{ result.current_price|round(2) }} руб.</p>
+                <p><strong>Сигнал:</strong>
+                    <span class="signal-{{ 'buy' if result.signal == 'BUY' else 'sell' if result.signal == 'SELL' else 'hold' }}">
+                        {{ result.signal }}
+                    </span>
+                </p>
+                {% if result.predictions %}
+                <p><strong>Прогнозы ИИ:</strong>
+                    {% if result.predictions.arima %}
+                        ARIMA: {{ result.predictions.arima|round(2) }}
+                    {% endif %}
+                </p>
+                {% endif %}
+                <p><strong>RSI:</strong> {{ result.technical_indicators.rsi|round(1) }}</p>
+                <p><strong>Объем:</strong> {{ result.technical_indicators.volume|round(0) }}</p>
+                <a href="/charts/{{ symbol }}">📊 Просмотр графика</a>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="analysis-results">
+            <p>Анализ ещё не проводился. <a href="/analyze">Запустить анализ рынка</a></p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

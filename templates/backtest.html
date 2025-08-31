@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Бэктестинг стратегий - AI-торговый бот T-Bank</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #e83e8c;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .nav {
+            margin-bottom: 20px;
+        }
+        .nav a {
+            display: inline-block;
+            background-color: #6c757d;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            margin: 5px;
+            border-radius: 5px;
+        }
+        .nav a:hover {
+            background-color: #545b62;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+        .form-row .form-group {
+            flex: 1;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="date"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        input[type="submit"] {
+            background-color: #dc3545;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        input[type="submit"]:hover {
+            background-color: #c82333;
+        }
+        .help-text {
+            color: #6c757d;
+            font-size: 12px;
+            margin-top: 3px;
+        }
+        .strategy-info {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .strategy-option {
+            background-color: #e9ecef;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 5px 0;
+            font-weight: bold;
+        }
+        .warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 10px;
+            border-radius: 4px;
+            color: #856404;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📈 Бэктестинг торговых стратегий</h1>
+        <p>Тестирование эффективности стратегий на исторических данных</p>
+    </div>
+
+    <div class="container">
+        <!-- Навигация -->
+        <div class="nav">
+            <a href="/">🏠 Главная</a>
+            <a href="/analyze">📊 Анализ рынка</a>
+        </div>
+
+        <div class="warning">
+            <strong>⚠️ Бэктестинг может занять значительное время!</strong><br>
+            В зависимости от периода и выбранных инструментов, расчет может длиться от 30 секунд до нескольких минут.
+        </div>
+
+        <div class="strategy-info">
+            <h4>Доступные стратегии T-Bank SDK:</h4>
+            <div class="strategy-option">ma_crossover - Пересечение скользящих средних</div>
+            <div class="strategy-option">bollinger - Полосы Боллинджера</div>
+            <div class="strategy-option">rsi - Индекс относительной силы (RSI)</div>
+            <div class="strategy-option">macd - Конвергенция-дивергенция движущихся средних</div>
+            <div class="strategy-option">volume_price - Объемно-ценовая стратегия</div>
+            <br>
+            <h4>Сложные стратегии AI:</h4>
+            <div class="strategy-option">trendbot_sma_rsi - SMA + RSI с фильтрами</div>
+            <div class="strategy-option">neuroinvest_lstm - LSTM нейронная сеть</div>
+            <div class="strategy-option">opexbot_ironcondor - Стратегия опционов Iron Condor</div>
+        </div>
+
+        <form action="/backtest" method="post">
+            <div class="form-group">
+                <label for="symbols">Тиковые символы:</label>
+                <input type="text"
+                       id="backtest_symbols"
+                       name="backtest_symbols"
+                       value="SBER"
+                       required
+                       placeholder="SBER,MOEX,AAPL">
+                <div class="help-text">Один или несколько символов через запятую</div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="start_date">Дата начала:</label>
+                    <input type="date"
+                           id="start_date"
+                           name="start_date"
+                           value="2023-01-01"
+                           required>
+                </div>
+
+                <div class="form-group">
+                    <label for="end_date">Дата окончания:</label>
+                    <input type="date"
+                           id="end_date"
+                           name="end_date"
+                           value="2024-01-01"
+                           required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="strategy">Стратегия:</label>
+                <select id="backtest_strategy" name="backtest_strategy" required>
+                    <option value="ma_crossover">MA Crossover (Пересечение SMA)</option>
+                    <option value="bollinger">Bollinger Bands</option>
+                    <option value="rsi">RSI Strategy</option>
+                    <option value="macd">MACD Strategy</option>
+                    <option value="volume_price">Volume-Price</option>
+                    <option value="trendbot_sma_rsi">Trendbot SMA+RSI</option>
+                    <option value="neuroinvest_lstm">Neuroinvest LSTM</option>
+                    <option value="opexbot_ironcondor">Iron Condor</option>
+                </select>
+            </div>
+
+            <input type="submit" value="🚀 Запустить бэктестинг">
+
+            <div class="help-text">
+                Результаты будут сохранены в папку backtest_results и РРПоказаны после расчета.
+            </div>
+        </form>
+    </div>
+</body>
+</html>

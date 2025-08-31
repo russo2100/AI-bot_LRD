@@ -1,0 +1,73 @@
+# Конфигурация для продакшен среды
+# ВНИМАНИЕ: Это реальная торговля с настоящими деньгами!
+
+# Источники данных
+data:
+  source: "tinkoff"  # Используем Tinkoff для российского рынка
+  update_interval_minutes: 5  # Чаще обновляем данные
+
+# Настройки Tinkoff API
+tinkoff:
+  token: "${TINKOFF_TOKEN}"
+  app_name: "ai-trading-bot-prod"
+  sandbox: false  # РЕАЛЬНАЯ ТОРГОВЛЯ!
+
+# Внешние ИИ сервисы (отключены для экономии)
+external_ai:
+  openai:
+    enabled: false  # Отключаем в продакшене для экономии
+  anthropic:
+    enabled: false
+  local_llm:
+    enabled: true   # Используем локальную модель
+
+# Более консервативное управление рисками
+risk_management:
+  initial_capital: 50000      # Меньше капитал для начала
+  max_drawdown: 0.10         # Строже лимит просадки (10%)
+  position_size_limit: 0.03   # Меньше размер позиции (3%)
+  stop_loss_pct: 0.015       # Строже стоп-лосс (1.5%)
+  take_profit_pct: 0.03      # Консервативный тейк-профит (3%)
+  daily_loss_limit: 0.03     # Лимит дневных потерь (3%)
+
+# Настройки торговли
+trading:
+  enabled: true              # Включаем реальную торговлю
+  broker: "tinkoff"
+  analysis_interval_minutes: 15  # Анализ каждые 15 минут
+  close_positions_on_stop: true  # Закрываем позиции при остановке
+
+# Более частое переобучение
+models:
+  retrain_interval_days: 7   # Переобучение каждую неделю
+  training_days: 180         # Меньше данных для обучения (быстрее)
+
+# Более строгие пороги для стратегий
+strategies:
+  prediction_threshold: 0.008  # Выше порог для сигналов
+  confidence_threshold: 0.7    # Выше требования к уверенности
+
+# Активный мониторинг
+monitoring:
+  export_interval_hours: 6   # Чаще экспортируем данные
+
+logging:
+  level: "WARNING"           # Меньше логов в продакшене
+
+# Уведомления
+telegram:
+  enabled: true
+  bot_token: "8002250383:AAHicDcSXs9e17VRrVI90U3upbMKLZ0tIs4"
+  chat_id: "1098364252"
+
+# Консервативные российские активы
+default_symbols:
+  - "SBER"    # Сбербанк - стабильный банк
+  - "GAZP"    # Газпром - энергетика  
+  - "LKOH"    # Лукойл - нефть
+  - "GMKN"    # Норникель - металлы
+  - "YNDX"    # Яндекс - технологии
+  - "RU000A107UL4"    # Т-Технологии
+  - "TATN"   # Татнефть
+  - "NRU5"    # Природный газ микро
+  - "SVU5"    # Серебро

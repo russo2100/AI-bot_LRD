@@ -1,0 +1,134 @@
+# Конфигурация AI-торгового бота
+# Основанная на информации из книги "ИИ в трейдинге"
+
+# Источники данных
+data:
+  source: "yahoo"  # yahoo, tinkoff, alpha_vantage
+  update_interval_minutes: 15
+
+# Настройки Tinkoff API
+tinkoff:
+  token: "${TINKOFF_TOKEN}"  # Переменная окружения
+  app_name: "ai-trading-bot"
+  sandbox: true  # true для тестирования, false для реальной торговли
+
+# Настройки внешних API для ИИ
+external_ai:
+  openai:
+    api_key: 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
+    model: "gpt-5"
+    enabled: true
+
+  anthropic:
+    api_key: "${ANTHROPIC_API_KEY}"
+    model: "claude-3-sonnet-20240229"
+    enabled: false
+
+  local_llm:
+    ollama_url: "http://localhost:11434"
+    model: "llama2"
+    enabled: false
+
+# API для новостей
+news:
+  news_api_key: 4PJH43N8DE7USC7J
+  alpha_vantage_key: 4PJH43N8DE7USC7J
+  sources: ["newsapi", "alpha_vantage"]
+  update_interval_hours: 0.5
+
+# Модели машинного обучения
+models:
+  training_days: 365  # Количество дней для обучения
+  retrain_interval_days: 30  # Переобучение каждые 30 дней
+
+  use_arima: true
+  arima_auto_order: true
+
+  use_lstm: true
+  lstm_window_size: 30
+  lstm_units: 64
+  lstm_epochs: 50
+
+  use_classifier: true
+  classification_threshold: 0.01  # 1% изменение цены для классификации
+
+  # Технические индикаторы
+  technical_indicators:
+    sma_periods: [10, 20, 50]
+    rsi_period: 14
+    macd_fast: 12
+    macd_slow: 26
+    macd_signal: 9
+    bollinger_period: 20
+    bollinger_std: 2
+
+# Торговые стратегии
+strategies:
+  prediction_threshold: 0.005  # 0.5% минимальное изменение для сигнала
+  confidence_threshold: 0.6    # Минимальная уверенность модели
+
+  ai_weight: 0.7              # Вес AI сигналов
+  technical_weight: 0.3       # Вес технических индикаторов
+
+  rsi_buy_threshold: 30       # RSI для покупки
+  rsi_sell_threshold: 70      # RSI для продажи
+
+# Управление рисками
+risk_management:
+  initial_capital: 100000     # Начальный капитал
+  max_drawdown: 0.15         # Максимальная просадка 15%
+  position_size_limit: 0.05   # Максимум 5% капитала на позицию
+  stop_loss_pct: 0.02        # Стоп-лосс 2%
+  take_profit_pct: 0.04      # Тейк-профит 4%
+
+  daily_loss_limit: 0.05     # Максимум 5% потерь в день
+  max_positions: 10          # Максимум открытых позиций
+
+# Настройки торговли
+trading:
+  enabled: false             # Реальная торговля отключена по умолчанию
+  broker: "tinkoff"          # tinkoff, interactive_brokers
+  analysis_interval_minutes: 15
+  close_positions_on_stop: false
+
+# Бэктестинг
+backtest:
+  initial_capital: 100000
+  commission: 0.001          # 0.1% комиссия
+  start_date: "2023-01-01"
+  end_date: "2023-12-31"
+
+# Мониторинг и логирование
+monitoring:
+  db_path: "data/metrics.db"
+  export_interval_hours: 24
+  alert_email: ""            # Email для уведомлений
+
+logging:
+  level: "INFO"              # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  file: "logs/trading_bot.log"
+  max_size_mb: 100
+  backup_count: 5
+
+  # Telegram уведомления (опционально)
+  telegram:
+    bot_token: ""
+    chat_id: ""
+    enabled: false
+
+# Торговые инструменты по умолчанию
+default_symbols:
+
+
+# Российские инструменты (для Tinkoff)
+russian_symbols:
+  - "SBER"    # Сбербанк
+  - "GAZP"    # Газпром  
+  - "YNDX"    # Яндекс
+  - "NVTK"    # Новатэк
+  - "ROSN"    # Роснефт
+  - "T"       # Т-Технологии
+  - "NAZ5"    # Насдак
+  - "TATN"    # Татнефть
+  - "NRU5"    # Природный газ микро
+  - "SVU5"    # Серебро
