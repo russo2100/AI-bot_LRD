@@ -15,7 +15,7 @@ tinkoff:
 # Настройки внешних API для ИИ
 external_ai:
   openai:
-    api_key: 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
+    api_key: Api_key
     model: "gpt-5"
     enabled: true
 
@@ -31,8 +31,8 @@ external_ai:
 
 # API для новостей
 news:
-  news_api_key: 4PJH43N8DE7USC7J
-  alpha_vantage_key: 4PJH43N8DE7USC7J
+  news_api_key: Api_key
+  alpha_vantage_key: Api_key
   sources: ["newsapi", "alpha_vantage"]
   update_interval_hours: 0.5
 
